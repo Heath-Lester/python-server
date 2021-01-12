@@ -1,6 +1,6 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from locations import get_all_locations, get_single_location, create_location, delete_location
+from locations import get_all_locations, get_single_location, create_location, delete_location, update_location
 from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_empoloyee
 from customers import get_all_customers, get_single_customer, create_customer, delete_customer, update_customer
 from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal
@@ -230,6 +230,11 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         self.wfile.write("".encode())
 
+        
+        if resource == "locations":
+            update_location(id, post_body)
+
+        self.wfile.write("".encode())
 
 # This function is not inside the class. It is the starting
 # point of this application.

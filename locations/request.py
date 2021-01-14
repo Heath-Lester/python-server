@@ -10,7 +10,8 @@ LOCATIONS = [
         "name": "Nashville South",
         "address": "209 Emory Drive"
     }
-  ]
+]
+
 
 def get_all_locations():
     return LOCATIONS
@@ -35,7 +36,7 @@ def create_location(location):
     new_id = max_id + 1
 
     location["id"] = new_id
-    
+
     LOCATIONS.append(location)
 
     return location
@@ -52,6 +53,7 @@ def delete_location(id):
 
     if location_index >= 0:
         LOCATIONS.pop(location_index)
+
 
 def update_location(id, new_location):
 

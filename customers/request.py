@@ -18,7 +18,8 @@ CUSTOMERS = [
         "name": "Baby Jesus",
         "id": 3
     }
-  ]
+]
+
 
 def get_all_customers():
     return CUSTOMERS

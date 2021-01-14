@@ -30,7 +30,8 @@ EMPLOYEES = [
         "animalId": 1,
         "id": 5
     }
-  ]
+]
+
 
 def get_all_employees():
     return EMPLOYEES
@@ -59,6 +60,7 @@ def create_employee(employee):
     EMPLOYEES.append(employee)
 
     return employee
+
 
 def delete_employee(id):
 

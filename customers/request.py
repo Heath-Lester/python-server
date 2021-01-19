@@ -30,7 +30,6 @@ def get_all_customers():
     with sqlite3.connect("./kennel.db") as conn:
 
         conn.row_factory = sqlite3.Row
-
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -44,14 +43,13 @@ def get_all_customers():
         """)
 
         customers = []
-
         dataset = db_cursor.fetchall()
 
         for row in dataset:
             customer = Customer(row['id'], row['name'], row['address'],
                                 row['email'], row['password'])
 
-            customer.append(customer.__dict__)
+            customers.append(customer.__dict__)
 
     return json.dumps(customers)
 
@@ -60,26 +58,26 @@ def get_single_customer(id):
 
     with sqlite3.connect("./kennel.db") as conn:
 
-    conn.row_factory = sqlite3.Row
-    db_cursor = conn.cursor()
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
 
-    db_cursor.execute("""
-    SELECT
-        a.id,
-        a.name,
-        a.address,
-        a.email,
-        a.password
-    FROM customer a
-    WHERE a.id = ?
-    """, (id, ))
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.name,
+            a.address,
+            a.email,
+            a.password
+        FROM customer a
+        WHERE a.id = ?
+        """, (id, ))
 
-    data = db_cursor.fetchone()
+        data = db_cursor.fetchone()
 
-    customer = Customer(data['id'], data['name'], data['address'],
-                        data['email'], row('password'))
+        customer = Customer(data['id'], data['name'], data['address'],
+                            data['email'], data('password'))
 
-    return json.dumps(animal.__dict__)
+        return json.dumps(customer.__dict__)
 
 
 def create_customer(customer):

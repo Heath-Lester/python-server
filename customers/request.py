@@ -75,7 +75,7 @@ def get_single_customer(id):
         data = db_cursor.fetchone()
 
         customer = Customer(data['id'], data['name'], data['address'],
-                            data['email'], data('password'))
+                            data['email'], data['password'])
 
         return json.dumps(customer.__dict__)
 

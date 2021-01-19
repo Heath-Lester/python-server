@@ -78,9 +78,9 @@ def get_single_employee(id):
             a.id,
             a.name,
             a.address,
-            a.lcation_id,
+            a.location_id,
             a.animal_id
-        FROM customer a
+        FROM employee a
         WHERE a.id = ?
         """, (id, ))
 

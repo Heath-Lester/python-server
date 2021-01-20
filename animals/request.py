@@ -170,12 +170,13 @@ def update_animal(id, new_animal):
             ANIMALS[index] = new_animal
             break
 
-def get_animal_by_location(location):
 
-    with sqlite3.connect("./kewnnel.db") as conn:
+def get_animals_by_location(location_id):
 
+    with sqlite3.connect("./kennel.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
+        
 
         db_cursor.execute("""
         SELECT
@@ -187,7 +188,7 @@ def get_animal_by_location(location):
             c.location_id
         FROM Animal c
         WHERE c.location_id = ?
-        """, ( location, ))
+        """, ( location_id, ))
 
         animals = []
         dataset = db_cursor.fetchall()

@@ -61,3 +61,5 @@ INSERT INTO `Animal` VALUES (null, "Jax", "Beagle", "Treatment", 1, 1);
 INSERT INTO `Animal` VALUES (null, "Falafel", "Siamese", "Treatment", 4, 2);
 INSERT INTO `Animal` VALUES (null, "Doodles", "Poodle", "Kennel", 3, 1);
 INSERT INTO `Animal` VALUES (null, "Daps", "Boxer", "Kennel", 2, 2);
+
+INSERT INTO `Animal` VALUES (null, "Daps", "Kennel", "Boxer", 2, 2);

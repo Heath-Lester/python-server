@@ -137,6 +137,7 @@ def create_animal(animal):
     # Return the dictionary with `id` property added
     return animal
 
+
 def delete_animal(id):
     with sqlite3.connect("./kennel.db") as conn:
         db_cursor = conn.cursor()

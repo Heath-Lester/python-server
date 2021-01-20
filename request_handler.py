@@ -113,11 +113,11 @@ class HandleRequests(BaseHTTPRequestHandler):
             if key == "email" and resource == "customers":
                 response = get_customers_by_email(value)
             
-            elif key == "location_id" and resource == "animals":
-                response = get_animals_by_location(int(value))
-
             elif key == "status" and resource == "animals":
                 response = get_animals_by_status(value)
+
+            elif key == "location_id" and resource == "animals":
+                response = get_animals_by_location(int(value))
 
             elif key == "location_id" and resource == "employees":
                 response = get_employees_by_location(int(value))

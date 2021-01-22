@@ -63,3 +63,10 @@ INSERT INTO `Animal` VALUES (null, "Doodles", "Poodle", "Kennel", 3, 1);
 INSERT INTO `Animal` VALUES (null, "Daps", "Boxer", "Kennel", 2, 2);
 
 INSERT INTO `Animal` VALUES (null, "Daps", "Kennel", "Boxer", 2, 2);
+
+
+DROP TABLE Location;
+DROP TABLE Customer;
+DROP TABLE Animal;
+DROP TABLE Employee;
+

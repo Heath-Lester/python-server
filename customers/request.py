@@ -80,17 +80,24 @@ def get_single_customer(id):
         return json.dumps(customer.__dict__)
 
 
-def create_customer(customer):
+def create_customer(new_customer):
 
-    max_id = CUSTOMERS[-1]["id"]
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    new_id = max_id + 1
+        db_cursor.execute("""
+        INSERT INTO Customer
+            ( name, address, email, password )
+        VALUES
+            ( ?, ?, ?, ?);
+        """, (new_customer['name'], new_customer['address'],
+            new_customer['email'], new_customer['password'] ))
 
-    customer["id"] = new_id
+        id = db_cursor.lastrowid
 
-    CUSTOMERS.append(customer)
+        new_customer['id'] = id
 
-    return customer
+    return json.dumps(new_customer)
 
 
 def delete_customer(id):

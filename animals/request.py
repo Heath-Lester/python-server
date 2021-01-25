@@ -13,7 +13,7 @@ ANIMALS = [
         "species": "Dog",
         "locationId": 1,
         "customerId": 4,
-        "status": "Admitted"
+        "treatment": "Admitted"
     },
     {
         "id": 2,
@@ -21,7 +21,7 @@ ANIMALS = [
         "species": "Dog",
         "locationId": 1,
         "customerId": 2,
-        "status": "Admitted"
+        "treatment": "Admitted"
     },
     {
         "id": 3,
@@ -29,7 +29,7 @@ ANIMALS = [
         "species": "Cat",
         "locationId": 2,
         "customerId": 1,
-        "status": "Admitted"
+        "treatment": "Admitted"
     }
 ]
 
@@ -48,7 +48,7 @@ def get_all_animals():
             a.id,
             a.name,
             a.breed,
-            a.status,
+            a.treatment,
             a.location_id,
             a.customer_id,
             l.name location_name,
@@ -75,7 +75,7 @@ def get_all_animals():
             # Note that the database fields are specified in
             # exact order of the parameters defined in the
             # Animal class above.
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['location_id'], row['customer_id'])
+            animal = Animal(row['id'], row['name'], row['breed'], row['treatment'], row['location_id'], row['customer_id'])
 
             location = Location(row['location_name'], row['location_address'])
 
@@ -120,7 +120,7 @@ def get_single_animal(id):
             a.id,
             a.name,
             a.breed,
-            a.status,
+            a.treatment,
             a.location_id,
             a.customer_id
         FROM animal a
@@ -132,28 +132,37 @@ def get_single_animal(id):
 
         # Create an animal instance from the current row
         animal = Animal(data['id'], data['name'], data['breed'],
-                            data['status'], data['location_id'],
+                            data['treatment'], data['location_id'],
                             data['customer_id'])
 
         return json.dumps(animal.__dict__)
 
 
-def create_animal(animal):
-    # Get the id value of the last animal in the list
-    max_id = ANIMALS[-1]["id"]
+def create_animal(new_animal):
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    # Add 1 to whatever that number is
-    new_id = max_id + 1
+        db_cursor.execute("""
+        INSERT INTO Animal
+            ( name, breed, treatment, location_id, customer_id )
+        VALUES
+            ( ?, ?, ?, ?, ?);
+        """, (new_animal['name'], new_animal['breed'],
+              new_animal['treatment'], new_animal['locationId'],
+              new_animal['customerId'] ))
 
-    # Add an `id` property to the animal dictionary
-    animal["id"] = new_id
+        # The `lastrowid` property on the cursor will return
+        # the primary key of the last thing that got added to
+        # the database.
+        id = db_cursor.lastrowid
 
-    # Add the animal dictionary to the list
-    ANIMALS.append(animal)
+        # Add the `id` property to the animal dictionary that
+        # was sent by the client so that the client sees the
+        # primary key in the response.
+        new_animal['id'] = id
 
-    # Return the dictionary with `id` property added
-    return animal
 
+    return json.dumps(new_animal)
 
 def delete_animal(id):
     with sqlite3.connect("./kennel.db") as conn:
@@ -174,11 +183,11 @@ def update_animal(id, new_animal):
             SET
                 name = ?,
                 breed = ?,
-                status = ?,
+                treatment = ?,
                 customer_id = ?,
                 location_id = ?,
         WHERE id = ?
-        """, (new_animal['name'], new_animal['breed'], new_animal['status'],
+        """, (new_animal['name'], new_animal['breed'], new_animal['treatment'],
               new_animal['customer_id'], 
               new_animal['location_id'], id, ))
 
@@ -206,7 +215,7 @@ def get_animals_by_location(location_id):
             c.id,
             c.name,
             c.breed,
-            c.status,
+            c.treatment,
             c.customer_id,
             c.location_id
         FROM Animal c
@@ -217,14 +226,14 @@ def get_animals_by_location(location_id):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'],
+            animal = Animal(row['id'], row['name'], row['breed'], row['treatment'],
                                 row['customer_id'], row['location_id'])
             animals.append(animal.__dict__)
 
     return json.dumps(animals)
 
 
-def get_animals_by_status(status):
+def get_animals_by_treatment(treatment):
 
     with sqlite3.connect("./kennel.db") as conn:
         conn.row_factory = sqlite3.Row
@@ -233,22 +242,40 @@ def get_animals_by_status(status):
 
         db_cursor.execute("""
         SELECT
-            c.id,
             c.name,
             c.breed,
-            c.status,
+            c.treatment,
             c.customer_id,
             c.location_id
+            c.id
         FROM Animal c
-        WHERE c.status = ?
-        """, ( status, ))
+        WHERE c.treatment = ?
+        """, ( treatment, ))
 
         animals = []
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'],
-                                row['customer_id'], row['location_id'])
+            animal = Animal(row['name'], row['breed'], row['treatment'],
+                                row['customer_id'], row['location_id'], row['id'])
             animals.append(animal.__dict__)
 
     return json.dumps(animals)
+
+
+
+# def create_animal(animal):
+#     # Get the id value of the last animal in the list
+#     max_id = ANIMALS[-1]["id"]
+
+#     # Add 1 to whatever that number is
+#     new_id = max_id + 1
+
+#     # Add an `id` property to the animal dictionary
+#     animal["id"] = new_id
+
+#     # Add the animal dictionary to the list
+#     ANIMALS.append(animal)
+
+#     # Return the dictionary with `id` property added
+#     return animal

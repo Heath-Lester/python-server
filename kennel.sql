@@ -17,7 +17,7 @@ CREATE TABLE `Animal` (
 	`id`  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`name`  TEXT NOT NULL,
 	`breed` TEXT NOT NULL,
-	`status` TEXT NOT NULL,
+	`treatment` TEXT NOT NULL,
 	`customer_id` INTEGER NOT NULL,
 	`location_id` INTEGER,
 	FOREIGN KEY(`customer_id`) REFERENCES `Customer`(`id`),
@@ -62,7 +62,6 @@ INSERT INTO `Animal` VALUES (null, "Falafel", "Siamese", "Treatment", 4, 2);
 INSERT INTO `Animal` VALUES (null, "Doodles", "Poodle", "Kennel", 3, 1);
 INSERT INTO `Animal` VALUES (null, "Daps", "Boxer", "Kennel", 2, 2);
 
-INSERT INTO `Animal` VALUES (null, "Daps", "Kennel", "Boxer", 2, 2);
 
 
 DROP TABLE Location;
@@ -75,7 +74,7 @@ SELECT
     a.id,
     a.name,
     a.breed,
-    a.status,
+    a.treatment,
     a.location_id,
     a.customer_id,
     l.name location_name,

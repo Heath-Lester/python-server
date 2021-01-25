@@ -34,11 +34,11 @@ def get_all_customers():
 
         db_cursor.execute("""
         SELECT
-            a.id,
             a.name,
             a.address,
             a.email,
-            a.password
+            a.password,
+            a.id
         FROM customer a
         """)
 
@@ -46,8 +46,8 @@ def get_all_customers():
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            customer = Customer(row['id'], row['name'], row['address'],
-                                row['email'], row['password'])
+            customer = Customer(row['name'], row['address'],
+                                row['email'], row['password'], row['id'])
 
             customers.append(customer.__dict__)
 
@@ -63,19 +63,19 @@ def get_single_customer(id):
 
         db_cursor.execute("""
         SELECT
-            a.id,
             a.name,
             a.address,
             a.email,
-            a.password
+            a.password,
+            a.id
         FROM customer a
         WHERE a.id = ?
         """, (id, ))
 
         data = db_cursor.fetchone()
 
-        customer = Customer(data['id'], data['name'], data['address'],
-                            data['email'], data['password'])
+        customer = Customer(data['name'], data['address'],
+                            data['email'], data['password'], data['id'])
 
         return json.dumps(customer.__dict__)
 
@@ -141,11 +141,11 @@ def get_customers_by_email(email):
         # Write the SQL query to get the information you want
         db_cursor.execute("""
         SELECT
-            c.id,
             c.name,
             c.address,
             c.email,
-            c.password
+            c.password,
+            c.id
         FROM Customer c
         WHERE c.email = ?
         """, ( email, ))
@@ -154,7 +154,7 @@ def get_customers_by_email(email):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            customer = Customer(row['id'], row['name'], row['address'], row['email'] , row['password'])
+            customer = Customer(row['name'], row['address'], row['email'] , row['password'], row['id'])
             customers.append(customer.__dict__)
 
     return json.dumps(customers)

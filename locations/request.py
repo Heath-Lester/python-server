@@ -65,17 +65,23 @@ def get_single_location(id):
         return json.dumps(location.__dict__)
 
 
-def create_location(location):
+def create_location(new_location):
 
-    max_id = LOCATIONS[-1]["id"]
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    new_id = max_id + 1
+        db_cursor.execute("""
+        INSERT INTO Location
+            ( name, address )
+        VALUES
+            ( ?, ?);
+        """, (new_location['name'], new_location['address'] ))
 
-    location["id"] = new_id
+        id = db_cursor.lastrowid
 
-    LOCATIONS.append(location)
+        new_location['id'] = id
 
-    return location
+    return json.dumps(new_location)
 
 
 def delete_location(id):

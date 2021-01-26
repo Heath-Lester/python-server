@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from locations import get_all_locations, get_single_location, create_location, delete_location, update_location
 from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_employee, get_employees_by_location
 from customers import get_all_customers, get_single_customer, create_customer, delete_customer, update_customer, get_customers_by_email
-from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal, get_animals_by_location, get_animals_by_status
+from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal, get_animals_by_location, get_animals_by_treatment
 import json
 
 
@@ -113,8 +113,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             if key == "email" and resource == "customers":
                 response = get_customers_by_email(value)
             
-            elif key == "status" and resource == "animals":
-                response = get_animals_by_status(value)
+            elif key == "treatment" and resource == "animals":
+                response = get_animals_by_treatment(value)
 
             elif key == "location_id" and resource == "animals":
                 response = get_animals_by_location(int(value))
@@ -232,14 +232,14 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "animals":
             success = update_animal(id, post_body)
 
-        # if resource == "customers":
-        #     success = update_customer(id, post_body)
+        if resource == "customers":
+            success = update_customer(id, post_body)
 
-        # if resource == "employees":
-        #     success = update_empoloyee(id, post_body)
+        if resource == "employees":
+            success = update_employee(id, post_body)
 
-        # if resource == "locations":
-        #     success = update_location(id, post_body)
+        if resource == "locations":
+            success = update_location(id, post_body)
 
         if success:
             self._set_headers(204)

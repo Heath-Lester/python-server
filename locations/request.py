@@ -26,9 +26,9 @@ def get_all_locations():
 
         db_cursor.execute("""
         SELECT
-            a.id,
             a.name,
-            a.address
+            a.address,
+            a.id
         FROM location a
         """)
 
@@ -36,7 +36,7 @@ def get_all_locations():
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            location = Location(row['id'], row['name'], row['address'])
+            location = Location(row['name'], row['address'], row['id'])
 
             locations.append(location.__dict__)
 
@@ -51,31 +51,37 @@ def get_single_location(id):
 
         db_cursor.execute("""
         SELECT
-            a.id,
             a.name,
-            a.address
+            a.address,
+            a.id
         FROM location a
         WHERE a.id = ?
         """, (id, ))
 
         data = db_cursor.fetchone()
 
-        location = Location(data['id'], data['name'], data['address'])
+        location = Location(data['name'], data['address'], data['id'])
 
         return json.dumps(location.__dict__)
 
 
-def create_location(location):
+def create_location(new_location):
 
-    max_id = LOCATIONS[-1]["id"]
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    new_id = max_id + 1
+        db_cursor.execute("""
+        INSERT INTO Location
+            ( name, address )
+        VALUES
+            ( ?, ?);
+        """, (new_location['name'], new_location['address'] ))
 
-    location["id"] = new_id
+        id = db_cursor.lastrowid
 
-    LOCATIONS.append(location)
+        new_location['id'] = id
 
-    return location
+    return json.dumps(new_location)
 
 
 def delete_location(id):
